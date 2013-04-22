@@ -10,10 +10,11 @@
 
 <form method="post">
 <% if(!locals.user){ %>
-姓名：<input type="text" name="name" /><br />
-邮箱：<input type="text" name="email" /><br />
-网址：<input type="text" name="website" /><br />
+	姓名：<input type="text" name="name" /><br />
+	邮箱：<input type="text" name="email" /><br />
+	网址：<input type="text" name="website" /><br />
 <% } %>
-留言：<br /><textarea name="content" rows="5" cols="80"></textarea>
-      <br /><input type="submit" value="留言" />
+留言：
+	<br /><textarea name="content" rows="5" cols="80"></textarea>
+    <br /><input type="submit" value="留言" />
 </form>
