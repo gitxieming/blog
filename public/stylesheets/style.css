@@ -11,3 +11,6 @@ article a{text-decoration:none;color:#dd0000;}
 article a:hover{color:#333333;text-decoration:underline;}
 article h2{display: inline;}
 article time{font-size:14px;float:right;}
+
+article span a{text-decoration:none;padding:.5em 1em;color:#ff0000;font-weight:bold;}
+article span a:hover{text-decoration:none;background-color:#ff0000;color:#f9f9f9;-webkit-transition:color .2s linear;}

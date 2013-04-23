@@ -9,19 +9,41 @@ var crypto = require('crypto'),
 
     module.exports = function(app){    
 
+        // app.get('/', function(req, res){
+        //     Post.getAll(null, function(err, posts){
+        //         if(err){
+        //             posts = [];
+        //         }
+        //         res.render('index',{
+        //             title: '主页',
+        //             user: req.session.user,
+        //             posts: posts,
+        //             success: req.flash('success').toString()
+        //         });
+        //     });
+        // });
         app.get('/', function(req, res){
-            Post.getAll(null, function(err, posts){
+            var page = req.query.p;
+            if(!page){
+                page = 1;
+            }else{
+                page = parseInt(page);
+            }
+            Post.getTen(null, page, function(err, posts){
                 if(err){
                     posts = [];
                 }
-                res.render('index',{
+                res.render('index', {
                     title: '主页',
                     user: req.session.user,
                     posts: posts,
+                    page: page,
+                    postsLen: posts.length,
                     success: req.flash('success').toString()
                 });
             });
         });
+
 
         app.get('/reg', checkNotLogin);
         app.get('/reg', function(req,res){
@@ -127,27 +149,57 @@ var crypto = require('crypto'),
         });
 
         // app.get('/:user',checkLogin);
-        app.get('/:user', function(req,res){
+        // app.get('/:user', function(req,res){
+        //     User.get(req.params.user, function(err, user){
+        //         if(!user){
+        //             req.flash('error','用户不存在'); 
+        //             return res.redirect('/');
+        //         }
+
+        //         Post.getAll(req.params.user, function(err, posts){
+        //             if(err){
+        //                 req.flash('err',err); 
+        //                 return res.redirect('/');
+        //             } 
+        //             res.render('user',{
+        //                 title:req.params.user,
+        //                 posts:posts,
+        //                 user : req.session.user,
+        //                 success : req.flash('success').toString(),
+        //                 error : req.flash('error').toString()
+        //             });
+        //         });
+        //     }); 
+        // });
+        app.get('/:user', function(req, res){
+            var page = req.query.p;
+            if(!page){
+                page = 1;
+            }else{
+                page = parseInt(page);
+            }
             User.get(req.params.user, function(err, user){
                 if(!user){
-                    req.flash('error','用户不存在'); 
+                    req.flash('error', '用户不存在');
                     return res.redirect('/');
                 }
 
-                Post.getAll(req.params.user, function(err, posts){
+                Post.getTen(req.params.user, page, function(err, posts){
                     if(err){
-                        req.flash('err',err); 
+                        req.flash('err', err);
                         return res.redirect('/');
-                    } 
-                    res.render('user',{
-                        title:req.params.user,
-                        posts:posts,
-                        user : req.session.user,
-                        success : req.flash('success').toString(),
-                        error : req.flash('error').toString()
+                    }
+                    res.render('user', {
+                        title: req.params.user,
+                        posts: posts,
+                        user: req.session.user,
+                        page: page,
+                        postsLen: posts.length,
+                        success: req.flash('success').toString(),
+                        error: req.flash('error').toString()
                     });
                 });
-            }); 
+            });
         });
 
 
