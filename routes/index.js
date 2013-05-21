@@ -171,6 +171,23 @@ var crypto = require('crypto'),
         //         });
         //     }); 
         // });
+
+        app.get('/archive', function(req, res){
+            Post.getArchive(function(err, posts){
+                if(err){
+                    req.flash('err', err);
+                    return res.redirect('/');
+                }
+                res.render('archive', {
+                    title: '存档',
+                    posts: posts,
+                    user: req.session.user,
+                    success: req.flash('success').toString(),
+                    error: req.flash('error').toString()
+                });
+            });
+        });
+
         app.get('/:user', function(req, res){
             var page = req.query.p;
             if(!page){
