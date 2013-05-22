@@ -137,7 +137,8 @@ var crypto = require('crypto'),
         app.post('/post', checkLogin);
         app.post('/post', function(req, res){
             var currentUser = req.session.user,
-                post = new Post(currentUser.name, req.body.title, req.body.post);
+                tags = [{"tag": req.body.tag1}, {"tag": req.body.tag2}, {"tag": req.body.tag3}], 
+                post = new Post(currentUser.name, req.body.title, tags, req.body.post);
             post.save(function(err){
                 if(err){
                     req.flash('error', err); 

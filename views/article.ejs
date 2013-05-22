@@ -2,6 +2,13 @@
 
 <%- include header %>
 <link rel="stylesheet" href="../../stylesheets/style.css">
+<p>
+<% locals.post.tags.forEach(function(tag, index){ %>
+    <% if(tag.tag){ %>
+    <a class="tag" href="/tags/<%= tag.tag %>"><%= tag.tag %></a>
+    <% } %>
+<% }) %>
+</p>
 <p><%- locals.post.post %></p>
 <p><time>——<a href="/<%= locals.post.user %>"><%= locals.post.user %></a> 发表于 <%= locals.post.time.minute %></time></p>
 <%- include comment %>

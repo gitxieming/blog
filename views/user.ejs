@@ -4,6 +4,13 @@
 <% locals.posts.forEach(function(post, index){ %>
 	<p><h2><a href="/<%= post.user %>/<%= post.time.day %>/<%= post.title %>"><%= post.title %></a>    </h2>
 	<time><%= post.time.day %></time></p>
+	<p>
+	<% post.tags.forEach(function(tag, index){ %>
+	    <% if(tag.tag){ %>
+	    <a class="tag" href="/tags/<%= tag.tag %>"><%= tag.tag %></a>
+	    <% } %>
+	<% }) %>
+	</p>	
 	<p><%- post.post %></p>
 <% }) %>
 
