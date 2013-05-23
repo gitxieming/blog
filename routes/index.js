@@ -189,35 +189,77 @@ var crypto = require('crypto'),
             });
         });
 
-        app.get('/:user', function(req, res){
-            var page = req.query.p;
-            if(!page){
-                page = 1;
-            }else{
-                page = parseInt(page);
-            }
-            User.get(req.params.user, function(err, user){
-                if(!user){
-                    req.flash('error', '用户不存在');
+        app.get('/tags', function(req,res){
+            Post.getTag(function(err, posts){
+                if(err){
+                    req.flash('err',err);
                     return res.redirect('/');
                 }
-
-                Post.getTen(req.params.user, page, function(err, posts){
-                    if(err){
-                        req.flash('err', err);
-                        return res.redirect('/');
-                    }
-                    res.render('user', {
-                        title: req.params.user,
-                        posts: posts,
-                        user: req.session.user,
-                        page: page,
-                        postsLen: posts.length,
-                        success: req.flash('success').toString(),
-                        error: req.flash('error').toString()
-                    });
+                res.render('tags',{
+                    title: '标签',
+                    posts: posts,
+                    user: req.session.user,
+                    success: req.flash('success').toString(),
+                    error: req.flash('error').toString()
                 });
             });
+        });
+
+        app.get('/tags/:tag', function(req,res){
+            Post.getAllByTag(req.params.tag, function(err, posts){
+                if(err){
+                    req.flash('err',err); 
+                    return res.redirect('/');
+                }
+                res.render('tag',{
+                    title: 'TAG:'+req.params.tag,
+                    posts: posts,
+                    user: req.session.user,
+                    success: req.flash('success').toString(),
+                    error: req.flash('error').toString()
+                });
+            });
+        });
+
+        app.get('/links', function(req,res){
+            res.render('links',{
+                title: '友情链接',
+                user: req.session.user,
+                success: req.flash('success').toString(),
+                error: req.flash('error').toString()
+            });
+        });
+        app.get('/:user', function(req, res){
+            if( req.params.user != 'tag' ){
+                var page = req.query.p;
+                if(!page){
+                    page = 1;
+                }else{
+                    page = parseInt(page);
+                }
+                User.get(req.params.user, function(err, user){
+                    if(!user){
+                        req.flash('error', '用户不存在');
+                        return res.redirect('/');
+                    }
+
+                    Post.getTen(req.params.user, page, function(err, posts){
+                        if(err){
+                            req.flash('err', err);
+                            return res.redirect('/');
+                        }
+                        res.render('user', {
+                            title: req.params.user,
+                            posts: posts,
+                            user: req.session.user,
+                            page: page,
+                            postsLen: posts.length,
+                            success: req.flash('success').toString(),
+                            error: req.flash('error').toString()
+                        });
+                    });
+                });
+            }
         });
 
 

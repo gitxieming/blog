@@ -150,3 +150,53 @@ Post.getArchive = function(callback) {
         });
     });
 };
+
+Post.getTag = function(callback) {
+    mongodb.open(function (err, db) {
+        if (err) {
+            return callback(err);
+        }
+
+        db.collection('posts', function(err, collection) {
+            if (err) {
+                mongodb.close();
+                return callback(err);
+            }
+            //distinct用来找出给定键的所有不同值
+            //"tags":[{"tag":tag1},{"tag":tag2},{"tag":tag3}]
+            //http://mongodb.github.io/node-mongodb-native/api-generated/collection.html#distinct
+            collection.distinct("tags.tag",function(err, docs){
+                mongodb.close();
+                if (err) {
+                    callback(err, null);
+                }
+                callback(null, docs);
+            });
+        });
+    });
+};
+
+Post.getAllByTag = function(tag, callback) {
+    mongodb.open(function (err, db) {
+        if (err) {
+            return callback(err);
+        }
+
+        db.collection('posts', function(err, collection) {
+            if (err) {
+                mongodb.close();
+                return callback(err);
+            }
+
+            collection.find({"tags.tag":tag},{"user":1,"time":1,"title":1}).sort({
+                time:-1
+            }).toArray(function(err, docs){
+                mongodb.close();
+                if (err) {
+                    callback(err, null);
+                }
+                callback(null, docs);
+            });
+        });
+    });
+};
