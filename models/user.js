@@ -25,7 +25,7 @@ mongodb.open(function(err, db){
 
         collection.ensureIndex('name',{
             unique:true
-        },{w: 0});
+        });
 
         collection.insert(user,{safe: true}, function(err, user){
             mongodb.close();

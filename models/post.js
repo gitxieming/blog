@@ -23,6 +23,7 @@ Post.prototype.save = function(callback) {
         time: time,
         title: this.title,
         tags: this.tags,
+        pv: 0,
         post: this.post
     };
 
@@ -122,6 +123,10 @@ Post.getOne = function(user, day, title, callback) {//获取一篇文章
                 }
                 callback(null, doc);
             });
+
+            //每次给pv键增加1
+            //加了一个空回调函数，不加会报错 http://stackoverflow.com/questions/14407834/error-when-inserting-a-document-into-mongodb-via-node-js
+            collection.update({"user":user,"time.day":day,"title":title},{$inc:{"pv":1}}, function(){});
         });
     });
 };
