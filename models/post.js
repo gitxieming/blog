@@ -1,4 +1,5 @@
-var mongodb = require('./db');
+var mongodb = require('./db'),
+    markdown = require('markdown').markdown;
 
 function Post(user, title, tags, post) {
     this.user = user;
@@ -97,6 +98,9 @@ Post.getTen = function( user, page, callback ){//获取十篇文章
                 if(err){
                     callback(err, null);
                 }
+                docs.forEach(function(doc){
+                    doc.post = markdown.toHTML(doc.post);
+                });
                 callback(null, docs);
             });
         });
@@ -121,6 +125,14 @@ Post.getOne = function(user, day, title, callback) {//获取一篇文章
                 if (err) {
                     callback(err, null);
                 }
+                doc.post = markdown.toHTML(doc.post);
+                //增加判断 是否存在评论
+                if(doc.comments){
+                    doc.comments.forEach(function(comment){
+                        comment.content = markdown.toHTML(comment.content);
+                    });  
+                }
+
                 callback(null, doc);
             });
 
