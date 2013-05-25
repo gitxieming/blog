@@ -66,6 +66,7 @@ var crypto = require('crypto'),
             var newUser = new User({
                 name: req.body.username,
                 password: password,
+                email : req.body.email
             });
             User.get(newUser.name, function(err, user){
                 if(user){
@@ -120,7 +121,7 @@ var crypto = require('crypto'),
         app.get('/logout', function(req, res){
             req.session.user = null;
             req.flash('success','登出成功');
-            res.redirect('/');
+            res.redirect('back');//保留在本页
         });
 
 
@@ -310,18 +311,18 @@ var crypto = require('crypto'),
                 time = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes();
             if(req.session.user){
                 var name=req.session.user.name;
-                comment = {"name":name, "email":name+"@gmail.com", "website":"www."+name+".com", "time":time, "content":req.body.content}
+                comment = {"name":name, "email":name+"@gmail.com", "website":"/"+name, "time":time, "content":req.body.content}
             } else {
-                comment = {"name":req.body.name, "email":req.body.email, "website":req.body.website, "time":time, "content":req.body.content}
+                comment = {"name":req.body.name, "email":req.body.email, "website":"http://"+req.body.website, "time":time, "content":req.body.content}
             }
             var oneComment = new Comment(req.params.user, req.params.time, req.params.title, comment);
             oneComment.save(function(err){
                 if(err){
                     req.flash('error', err); 
-                    return res.redirect('/');
+                    return res.redirect('back');//保留在本页
                 }
                 req.flash('success', '评论成功!');
-                res.redirect('/');
+                res.redirect('back');//保留在本页
             });
         });
 

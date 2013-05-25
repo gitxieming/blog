@@ -28,7 +28,9 @@ app.configure(function(){
     secret: settings.cookieSecret,
     store: new MongoStore({
       db: settings.db
-    })
+    }),
+    key: settings.db,
+    cookie: {maxAge: 1000*60*60*24*30} //30 days 在cookie中记录登录状态30天，即使我们关闭浏览器，重新打开后依然是登录状态
   }));
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
