@@ -1,11 +1,11 @@
 <br /><br />
-<% if(locals.post.comments){ %>
+
 <% locals.post.comments.forEach(function(comment, index){ %>
     <p><a href="<%= comment.website %>"><%= comment.name %></a>
     <time>回复于 <%= comment.time %></time></p>
     <p><%- comment.content %></p>
 <% }) %>
-<% } %>
+
 
 
 <form method="post">

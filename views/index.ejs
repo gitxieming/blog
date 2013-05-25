@@ -12,12 +12,7 @@
         <% }) %>
     </p>
     <p><%- post.post %></p>
-    <p class="info">阅读：<%= post.pv %> | 评论：
-        <% if(post.comments){ %>
-            <%= post.comments.length %></p>
-        <% } else { %>
-            <%= 0 %></p>
-        <% } %>
+    <p class="info">阅读：<%= post.pv %> | 评论：<%= post.comments.length %></p>
 <% }) %>
 <%- include pager %>
 <%- include footer %>

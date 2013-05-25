@@ -12,11 +12,6 @@
     <% }) %>
 </p>
 <p><%- locals.post.post %></p>
-<p class="info">阅读：<%= locals.post.pv %> | 评论：
-    <% if(locals.post.comments){ %>
-        <%= locals.post.comments.length %></p>
-    <% } else { %>
-        <%= 0 %></p>
-    <% } %>
+<p class="info">阅读：<%= locals.post.pv %> | 评论：<%= locals.post.comments.length %></p>
 <%- include comment %>
 <%- include footer %>
