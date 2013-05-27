@@ -281,7 +281,6 @@ var crypto = require('crypto'),
             }
         });
 
-
         app.get('/:user/:day/:title', function(req,res){
             User.get(req.params.user,function(err, user){
                 if(!user){
@@ -326,7 +325,10 @@ var crypto = require('crypto'),
             });
         });
 
-
+        //404
+        app.all('*', function(req, res){
+            res.render('404');
+        });
 };
 
 function checkLogin(req, res, next){
