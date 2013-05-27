@@ -40,8 +40,6 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
-// app.get('/', routes.index);
-// app.get('/users', user.list);
 
 app.use(function(req,res,next){
     var err = req.flash('error'),
