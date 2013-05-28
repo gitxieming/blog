@@ -120,12 +120,12 @@ Post.getOne = function(user, day, title, callback) {//获取一篇文章
                 mongodb.close();
                 return callback(err);
             }
-
-            collection.findOne({"user":user,"time.day":day,"title":title},function (err, doc) {
+            collection.findOne({"user":user,"time.day":day,"title":title}, function (err, doc) {
                 mongodb.close();
                 if (err) {
                     callback(err, null);
                 }
+                console.log(doc);
                 doc.post = markdown.toHTML(doc.post);
                 //增加判断 是否存在评论
                 if(doc.comments){
