@@ -131,9 +131,8 @@ Post.getOne = function(user, day, title, callback) {//获取一篇文章
                 if(doc.comments){
                     doc.comments.forEach(function(comment){
                         comment.content = markdown.toHTML(comment.content);
-                    });  
+                    });
                 }
-
                 callback(null, doc);
             });
 

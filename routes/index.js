@@ -9,19 +9,6 @@ var crypto = require('crypto'),
 
     module.exports = function(app){    
 
-        // app.get('/', function(req, res){
-        //     Post.getAll(null, function(err, posts){
-        //         if(err){
-        //             posts = [];
-        //         }
-        //         res.render('index',{
-        //             title: '主页',
-        //             user: req.session.user,
-        //             posts: posts,
-        //             success: req.flash('success').toString()
-        //         });
-        //     });
-        // });
         app.get('/', function(req, res){
             var page = req.query.p;
             if(!page){
@@ -43,7 +30,6 @@ var crypto = require('crypto'),
                 });
             });
         });
-
 
         app.get('/reg', checkNotLogin);
         app.get('/reg', function(req,res){
@@ -124,7 +110,6 @@ var crypto = require('crypto'),
             res.redirect('back');//保留在本页
         });
 
-
         app.get('/post', checkLogin);
         app.get('/post', function(req, res){
             res.render('post',{
@@ -149,30 +134,6 @@ var crypto = require('crypto'),
                 res.redirect('/');
             });
         });
-
-        // app.get('/:user',checkLogin);
-        // app.get('/:user', function(req,res){
-        //     User.get(req.params.user, function(err, user){
-        //         if(!user){
-        //             req.flash('error','用户不存在'); 
-        //             return res.redirect('/');
-        //         }
-
-        //         Post.getAll(req.params.user, function(err, posts){
-        //             if(err){
-        //                 req.flash('err',err); 
-        //                 return res.redirect('/');
-        //             } 
-        //             res.render('user',{
-        //                 title:req.params.user,
-        //                 posts:posts,
-        //                 user : req.session.user,
-        //                 success : req.flash('success').toString(),
-        //                 error : req.flash('error').toString()
-        //             });
-        //         });
-        //     }); 
-        // });
 
         app.get('/archive', function(req, res){
             Post.getArchive(function(err, posts){
@@ -246,8 +207,8 @@ var crypto = require('crypto'),
                     error: req.flash('error').toString()
                 });
             });
-        });
-        
+        });                      
+
         app.get('/:user', function(req, res){
             if( req.params.user != 'tag' ){
                 var page = req.query.p;
@@ -304,7 +265,7 @@ var crypto = require('crypto'),
         });
 
         //发表评论
-        app.post('/:user/:time/:title', function(req,res){
+        app.post('/:user/:day/:title', function(req,res){
             var comment = null,
                 date = new Date(),
                 time = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes();
@@ -314,7 +275,7 @@ var crypto = require('crypto'),
             } else {
                 comment = {"name":req.body.name, "email":req.body.email, "website":"http://"+req.body.website, "time":time, "content":req.body.content}
             }
-            var oneComment = new Comment(req.params.user, req.params.time, req.params.title, comment);
+            var oneComment = new Comment(req.params.user, req.params.day, req.params.title, comment);
             oneComment.save(function(err){
                 if(err){
                     req.flash('error', err); 
