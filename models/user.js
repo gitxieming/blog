@@ -4,6 +4,7 @@ function User(user){
     this.name = user.name;
     this.password = user.password;
     this.email = user.email;
+    this.head = user.head;
 };
 module.exports = User;
 
@@ -11,7 +12,8 @@ User.prototype.save = function save(callback) {
     var user = {
         name: this.name,
         password: this.password,
-        email: this.email
+        email: this.email,
+        head: this.head
     };
 
 mongodb.open(function(err, db){

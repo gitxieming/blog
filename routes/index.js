@@ -49,10 +49,14 @@ var crypto = require('crypto'),
             }
             var md5 = crypto.createHash('md5');
             var password = md5.update(req.body.password).digest('base64');
+            var md5 = crypto.createHash('md5');
+            var email_MD5 = md5.update(req.body.email.toLowerCase()).digest('base64');
+            var head = "http://www.gravatar.com/avatar/" + email_MD5 + "?s=48";      
             var newUser = new User({
                 name: req.body.username,
                 password: password,
-                email : req.body.email
+                email : req.body.email,
+                head: head
             });
             User.get(newUser.name, function(err, user){
                 if(user){
@@ -269,11 +273,14 @@ var crypto = require('crypto'),
             var comment = null,
                 date = new Date(),
                 time = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes();
+            var md5 = crypto.createHash('md5'),
+                email_MD5 = md5.update(req.body.email).digest('base64'),
+                head = "http://www.gravatar.com/avatar/" + email_MD5 + "?s=48";
             if(req.session.user){
                 var name=req.session.user.name;
-                comment = {"name":name, "email":name+"@gmail.com", "website":"/"+name, "time":time, "content":req.body.content}
+                comment = {"name":name, "head": head, email":name+"@gmail.com", "website":"/"+name, "time":time, "content":req.body.content}
             } else {
-                comment = {"name":req.body.name, "email":req.body.email, "website":"http://"+req.body.website, "time":time, "content":req.body.content}
+                comment = {"name":req.body.name, "head": head, "email":req.body.email, "website":"http://"+req.body.website, "time":time, "content":req.body.content}
             }
             var oneComment = new Comment(req.params.user, req.params.day, req.params.title, comment);
             oneComment.save(function(err){

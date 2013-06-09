@@ -1,9 +1,11 @@
 <br /><br />
 
 <% locals.post.comments.forEach(function(comment, index){ %>
-    <p><a href="<%= comment.website %>"><%= comment.name %></a>
+<div style="padding-left:4em">
+    <p><img src="<%= comment.head %>" class="l_head" /><a href="<%= comment.website %>"><%= comment.name %></a>
     <time>回复于 <%= comment.time %></time></p>
     <p><%- comment.content %></p>
+</div>
 <% }) %>
 
 

@@ -1,6 +1,8 @@
 <%- include header %>
 <% locals.posts.forEach(function(post, index){ %>
-    <p><h2><a href="/<%= post.user %>/<%= post.time.day %>/<%= post.title %>"><%= post.title %></a></h2></p>
+    <p><h2><a href="/<%= post.user %>/<%= post.time.day %>/<%= post.title %>"><%= post.title %></a>
+            <a href="/<%= post.user %>"><img src="<%= post.head %>" class="r_head" /></a>
+    </h2></p>
     <p class="info">
         作者：<a href="/<%= post.user %>"><%= post.user %></a> |
         日期：<%= post.time.minute %> |
