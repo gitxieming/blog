@@ -48,7 +48,7 @@ var crypto = require('crypto'),
                 return res.redirect('/reg');
             }
             var md5 = crypto.createHash('md5');
-            console.log('md5',md5);
+            // console.log('md5',md5);
             var password = md5.update(req.body.password).digest('hex');
             var md5 = crypto.createHash('md5');
             var email_MD5 = md5.update(req.body.email.toLowerCase()).digest('hex');
@@ -128,8 +128,8 @@ var crypto = require('crypto'),
         app.post('/post', checkLogin);
         app.post('/post', function(req, res){
             var currentUser = req.session.user;
-            console.log('sssssssssssssssss');
-            console.log(currentUser.head);
+            //console.log('sssssssssssssssss');
+            //console.log(currentUser.head);
             var tags = [{"tag": req.body.tag1}, {"tag": req.body.tag2}, {"tag": req.body.tag3}];
             var post = new Post(currentUser.name, currentUser.head, req.body.title, tags, req.body.post);
             post.save(function(err){
@@ -217,7 +217,7 @@ var crypto = require('crypto'),
         });                      
 
         app.get('/:user', function(req, res){
-            if( req.params.user != 'tag' ){
+            if( req.params.user != 'tags' ){
                 var page = req.query.p;
                 if(!page){
                     page = 1;
@@ -251,6 +251,7 @@ var crypto = require('crypto'),
 
         app.get('/:user/:day/:title', function(req,res){
             User.get(req.params.user,function(err, user){
+                console.log('log user...', req.params);
                 if(!user){
                     req.flash('error','用户不存在'); 
                     return res.redirect('/');
@@ -277,10 +278,10 @@ var crypto = require('crypto'),
             
             var email = '';
             if(req.session.user){
-                console.log(currentUser.email);
+                // console.log(currentUser.email);
                 email = currentUser.email;
             }else{
-                console.log(req.body.email)
+                // console.log(req.body.email)
                 email = req.body.email;
             }
             var comment = null,

@@ -101,7 +101,7 @@ Post.getTen = function( user, page, callback ){//获取十篇文章
                 if(err){
                     callback(err, null);
                 }
-                console.log(docs);
+                //console.log(docs);
                 docs.forEach(function(doc){
                     doc.post = markdown.toHTML(doc.post);
                 });
@@ -128,7 +128,7 @@ Post.getOne = function(user, day, title, callback) {//获取一篇文章
                 if (err) {
                     callback(err, null);
                 }
-                console.log(doc);
+                //console.log(doc);
                 doc.post = markdown.toHTML(doc.post);
                 //增加判断 是否存在评论
                 if(doc.comments){
