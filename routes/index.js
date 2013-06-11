@@ -48,9 +48,10 @@ var crypto = require('crypto'),
                 return res.redirect('/reg');
             }
             var md5 = crypto.createHash('md5');
-            var password = md5.update(req.body.password).digest('base64');
+            console.log('md5',md5);
+            var password = md5.update(req.body.password).digest('hex');
             var md5 = crypto.createHash('md5');
-            var email_MD5 = md5.update(req.body.email.toLowerCase()).digest('base64');
+            var email_MD5 = md5.update(req.body.email.toLowerCase()).digest('hex');
             var head = "http://www.gravatar.com/avatar/" + email_MD5 + "?s=48";      
             var newUser = new User({
                 name: req.body.username,
@@ -90,8 +91,8 @@ var crypto = require('crypto'),
 
         app.post('/login', checkNotLogin);
         app.post('/login', function(req, res){
-            var md5 = crypto.createHash('md5'),
-                password = md5.update(req.body.password).digest('base64');
+            var md5 = crypto.createHash('md5');
+            var password = md5.update(req.body.password).digest('hex');
             User.get(req.body.username, function(err, user){
                 if(!user){
                     req.flash('error', '用户不存在'); 
@@ -126,9 +127,11 @@ var crypto = require('crypto'),
 
         app.post('/post', checkLogin);
         app.post('/post', function(req, res){
-            var currentUser = req.session.user,
-                tags = [{"tag": req.body.tag1}, {"tag": req.body.tag2}, {"tag": req.body.tag3}], 
-                post = new Post(currentUser.name, req.body.title, tags, req.body.post);
+            var currentUser = req.session.user;
+            console.log('sssssssssssssssss');
+            console.log(currentUser.head);
+            var tags = [{"tag": req.body.tag1}, {"tag": req.body.tag2}, {"tag": req.body.tag3}];
+            var post = new Post(currentUser.name, currentUser.head, req.body.title, tags, req.body.post);
             post.save(function(err){
                 if(err){
                     req.flash('error', err); 
@@ -270,15 +273,26 @@ var crypto = require('crypto'),
 
         //发表评论
         app.post('/:user/:day/:title', function(req,res){
+            var currentUser = req.session.user;
+            
+            var email = '';
+            if(req.session.user){
+                console.log(currentUser.email);
+                email = currentUser.email;
+            }else{
+                console.log(req.body.email)
+                email = req.body.email;
+            }
             var comment = null,
                 date = new Date(),
                 time = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes();
-            var md5 = crypto.createHash('md5'),
-                email_MD5 = md5.update(req.body.email).digest('base64'),
-                head = "http://www.gravatar.com/avatar/" + email_MD5 + "?s=48";
+            var md5 = crypto.createHash('md5');
+            var email_MD5 = md5.update(email).digest('hex');
+            // var email_MD5 = crypto.createHash('md5').update("iwhithey@163.com").digest('hex');
+            var head = "http://www.gravatar.com/avatar/" + email_MD5 + "?s=48";
             if(req.session.user){
                 var name=req.session.user.name;
-                comment = {"name":name, "head": head, email":name+"@gmail.com", "website":"/"+name, "time":time, "content":req.body.content}
+                comment = {"name":name, "head": head, "email":name+"@gmail.com", "website":"/"+name, "time":time, "content":req.body.content}
             } else {
                 comment = {"name":req.body.name, "head": head, "email":req.body.email, "website":"http://"+req.body.website, "time":time, "content":req.body.content}
             }

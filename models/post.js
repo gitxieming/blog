@@ -101,6 +101,7 @@ Post.getTen = function( user, page, callback ){//获取十篇文章
                 if(err){
                     callback(err, null);
                 }
+                console.log(docs);
                 docs.forEach(function(doc){
                     doc.post = markdown.toHTML(doc.post);
                 });
